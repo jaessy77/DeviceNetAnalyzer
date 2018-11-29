@@ -7,13 +7,13 @@ DeviceNetAnalyzerSettings::DeviceNetAnalyzerSettings()
 	mBitRate( 9600 )
 {
 	mInputChannelInterface.reset( new AnalyzerSettingInterfaceChannel() );
-	mInputChannelInterface->SetTitleAndTooltip( "Serial", "Standard DeviceNet" );
+	mInputChannelInterface->SetTitleAndTooltip( "DeviceNet", "Standard DeviceNet (based on CAN2.0A)" );
 	mInputChannelInterface->SetChannel( mInputChannel );
 
 	mBitRateInterface.reset( new AnalyzerSettingInterfaceInteger() );
 	mBitRateInterface->SetTitleAndTooltip( "Bit Rate (Bits/S)",  "Specify the bit rate in bits per second." );
-	mBitRateInterface->SetMax( 6000000 );
-	mBitRateInterface->SetMin( 1 );
+	mBitRateInterface->SetMax( 500000 );
+	mBitRateInterface->SetMin( 125000 );
 	mBitRateInterface->SetInteger( mBitRate );
 
 	AddInterface( mInputChannelInterface.get() );
@@ -24,7 +24,7 @@ DeviceNetAnalyzerSettings::DeviceNetAnalyzerSettings()
 	AddExportExtension( 0, "csv", "csv" );
 
 	ClearChannels();
-	AddChannel( mInputChannel, "Serial", false );
+	AddChannel( mInputChannel, "DeviceNet", false );
 }
 
 DeviceNetAnalyzerSettings::~DeviceNetAnalyzerSettings()

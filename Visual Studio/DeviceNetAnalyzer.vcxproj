@@ -242,12 +242,14 @@
     <ClCompile Include="..\Source\DeviceNetAnalyzerResults.cpp" />
     <ClCompile Include="..\Source\DeviceNetAnalyzerSettings.cpp" />
     <ClCompile Include="..\Source\DeviceNetSimulationDataGenerator.cpp" />
+    <ClCompile Include="DeviceNetProtocol.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\DeviceNetAnalyzer.h" />
     <ClInclude Include="..\Source\DeviceNetAnalyzerResults.h" />
     <ClInclude Include="..\Source\DeviceNetAnalyzerSettings.h" />
     <ClInclude Include="..\Source\DeviceNetSimulationDataGenerator.h" />
+    <ClInclude Include="DeviceNetProtocol.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
