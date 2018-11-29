@@ -1,3 +1,5 @@
+# WORK IN PROGRESS .. NOT YET FINISHED
+
 # Saleae Analyzer SDK Sample Analyzer
 The Saleae Analyzer SDK is used to create custom plugins for the Saleae Logic software. These plugins are used to decode protocol data from captured waveforms.
 
