@@ -155,14 +155,31 @@
 #define BIT_R1	0x00000000	// always dominant '0' since DeviceNet is based on CAN 2.0A where r1 is reserved.
 #define BIT_R0	0x00000000	// always dominant '0' since DeviceNet is based on CAN 2.0A where r0 is reserved.
 
+#define LENGTH_ARBITRATION_FIELD	12
+#define LENGTH_DATA_LENGTH_CODE		4
+#define LENGTH_DATA_BYTE			8
+#define LENGTH_END_OF_FRAME			7
+
 enum DeviceNetFrameType
 {
-	ArbitrationField,	// 11 bit Identifier, 1 bit RTR (always dominant '0' since  DeviceNet does not make use of the CAN Remote Frame)
+	IdentifierField,	// 11 bit Identifier, 1 bit RTR (always dominant '0' since  DeviceNet does not make use of the CAN Remote Frame)
+	IdentifierFieldEx,	// In DeviceNet this Shound never occour !	
 	ControlField,		// 2 bit Reserved (r1,r0 always '00'), 4 bit Data lenght code
 	DataField,
 	CrcField,
 	AckField,
 	DeviceNetError
+};
+
+#define REMOTE_FRAME ( 1 << 0 )
+
+enum IdentifierType
+{
+	MessageGroup1,
+	MessageGroup2,
+	MessageGroup3,
+	MessageGroup4,
+	InvalidCanIdentifiers
 };
 
 class DeviceNetProtocol

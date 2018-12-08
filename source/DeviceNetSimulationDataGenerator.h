@@ -2,7 +2,8 @@
 #define DEVICENET_SIMULATION_DATA_GENERATOR
 
 #include <SimulationChannelDescriptor.h>
-#include <string>
+#include <AnalyzerHelpers.h>
+
 class DeviceNetAnalyzerSettings;
 
 class DeviceNetSimulationDataGenerator
@@ -18,12 +19,31 @@ protected:
 	DeviceNetAnalyzerSettings* mSettings;
 	U32 mSimulationSampleRateHz;
 
-protected:
-	void CreateSerialByte();
-	std::string mSerialText;
-	U32 mStringIndex;
+protected: // fuctions
+	void CreateDataFrame(enum IdentifierType idType, U8 GroupMessageID, U8 MacID, std::vector<U8>& data, bool get_ack_in_response);
+	void AddCrc();
+	U16 ComputeCrc(std::vector<BitState>& bits, U32 num_bits);
+	void WriteFrame(bool error = false);
 
-	SimulationChannelDescriptor mSerialSimulationData;
+protected: //vars
+	ClockGenerator mClockGenerator;
+	SimulationChannelDescriptor mDeviceNetSimulationData;  //if we had more than one channel to simulate, they would need to be in an array
+
+	U8 mValue;
+
+	std::vector<BitState> mFakeStartOfFrameField;
+	std::vector<BitState> mFakeArbitrationField;
+	std::vector<BitState> mFakeControlField;
+	std::vector<BitState> mFakeDataField;
+	std::vector<BitState> mFakeCrcFieldWithoutDelimiter;
+	std::vector<BitState> mFakeAckField;
+	std::vector<BitState> mFakeEndOfFrame;
+	std::vector<BitState> mFakeStuffedBits;
+	std::vector<BitState> mFakeFixedFormBits;
+
+	
+
+
 
 };
 #endif //DEVICENET_SIMULATION_DATA_GENERATOR

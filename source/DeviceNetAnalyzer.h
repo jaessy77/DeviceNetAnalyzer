@@ -5,6 +5,25 @@
 #include "DeviceNetAnalyzerResults.h"
 #include "DeviceNetSimulationDataGenerator.h"
 
+enum CanBitType
+{
+	Standard,
+	BitStuff
+};
+
+class CanMarker
+{
+public:
+	CanMarker(U64 sample, enum CanBitType type)
+	{
+		mSample = sample;
+		mType = type;
+	}
+
+	U64 mSample;
+	enum CanBitType mType;
+};
+
 class DeviceNetAnalyzerSettings;
 class ANALYZER_EXPORT DeviceNetAnalyzer : public Analyzer2
 {
@@ -24,15 +43,54 @@ public:
 protected: //vars
 	std::auto_ptr< DeviceNetAnalyzerSettings > mSettings;
 	std::auto_ptr< DeviceNetAnalyzerResults > mResults;
-	AnalyzerChannelData* mSerial;
+	AnalyzerChannelData* mDeviceNet;
+	U32 mSampleRateHz;
 
 	DeviceNetSimulationDataGenerator mSimulationDataGenerator;
 	bool mSimulationInitilized;
 
-	//Serial analysis vars:
-	U32 mSampleRateHz;
-	U32 mStartOfStopBitOffset;
-	U32 mEndOfStopBitOffset;
+protected: //analysis functions
+	void WaitFor7RecessiveBits();
+	void InitSampleOffsets();
+	void GetRawFrame();
+	void AnalizeRawFrame();
+	bool UnstuffRawFrameBit(BitState& result, U64& sample, bool reset = false);
+	bool GetFixedFormFrameBit(BitState& result, U64& sample);
+
+protected: //analysis vars:
+	//ChunkedArray<ResultBubble>* mFrameBubbles;
+
+	U32 mNumSamplesIn7Bits;
+	U32 mRecessiveCount;
+	U32 mDominantCount;
+	U32 mRawFrameIndex;
+	U64 mStartOfFrame;
+	U32 mIdentifier;
+	U32 mCrcValue;
+	bool mAck;
+
+	std::vector<U32> mSampleOffsets;
+	std::vector<BitState> mRawBitResults;
+	std::vector<BitState> mBitResults;
+
+	std::vector<CanMarker> mCanMarkers;
+
+	std::vector<BitState> mArbitrationField;
+	bool mStandardCan;
+	bool mRemoteFrame;
+	U32 mNumDataBytes;
+	std::vector<BitState> mControlField;
+	std::vector<BitState> mDataField;
+	std::vector<BitState> mCrcFieldWithoutDelimiter;
+	BitState mCrcDelimiter;
+	std::vector<BitState> mAckField;
+	std::vector<BitState> mEndOfFrame;
+
+	U32 mNumRawBits;
+	bool mCanError;
+	U64 mErrorStartingSample;
+	U64 mErrorEndingSample;
+
 };
 
 extern "C" ANALYZER_EXPORT const char* __cdecl GetAnalyzerName();
